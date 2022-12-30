@@ -4,9 +4,12 @@ package com.example.mymusic;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,6 +34,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.google.android.material.navigation.NavigationView;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,6 +44,9 @@ public
 class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     TextView noMusicTextview,songTxt;
+    Toolbar toolbar;
+    NavigationView navigationView;
+    DrawerLayout drawerLayout;
 
     ArrayList<AudioModel> SongList = new ArrayList<>();
 
@@ -48,9 +56,8 @@ class MainActivity extends AppCompatActivity {
     void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        recyclerView =findViewById(R.id.recycleView);
-        noMusicTextview =findViewById(R.id.no_songtext);
-        songTxt = findViewById(R.id.songtext);
+        Log.d(TAG, "onCreate: state to window");
+        initVar();
 
 
         if (!checkPermission()) {
@@ -88,6 +95,28 @@ class MainActivity extends AppCompatActivity {
 
             recyclerView.setAdapter(new MusicAdapter(SongList,getApplicationContext()));
         }
+    }
+
+    private
+    void initVar() {
+        recyclerView =findViewById(R.id.recycleView);
+        noMusicTextview =findViewById(R.id.no_songtext);
+        songTxt = findViewById(R.id.songtext);
+        drawerLayout = findViewById(R.id.drawerLayout);
+        toolbar = findViewById(R.id.toolbar);
+        navigationView = findViewById(R.id.NavigationDrawer);
+        // this is for custom toolbar
+        setSupportActionBar(toolbar);
+        Log.d(TAG, "onCreate: state after the toolbar setup");
+
+        // toggle action bar
+        ActionBarDrawerToggle drawerToggle =new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
+        // click view swip kar ka toggle
+        drawerLayout.addDrawerListener(drawerToggle);
+        Log.d(TAG, "initVar: after drawer listner");
+        drawerToggle.syncState();
+
+
     }
 
     private
